@@ -1,0 +1,142 @@
+table f_item_fulfillment_lines
+	lineageTag: c85fea42-66a8-4536-a39b-6adceb122664
+
+	column item_fulfillment_line_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 45aedc2d-7ca6-442c-8bf7-d0595e08a760
+		summarizeBy: sum
+		sourceColumn: item_fulfillment_line_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column account_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 155bfdf9-c50b-410d-91e8-47867cd2aa90
+		summarizeBy: none
+		sourceColumn: account_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column item_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 4bbe562b-efdb-4590-a2f7-b3cbdd6a9f67
+		summarizeBy: none
+		sourceColumn: item_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column qty
+		dataType: int64
+		formatString: 0
+		lineageTag: f21f1ef8-2732-41eb-bad8-c3bacd9b949c
+		summarizeBy: sum
+		sourceColumn: qty
+
+		annotation SummarizationSetBy = Automatic
+
+	column qty_picked
+		dataType: int64
+		formatString: 0
+		lineageTag: 83615b70-820b-488d-8ca5-4678cba80f15
+		summarizeBy: sum
+		sourceColumn: qty_picked
+
+		annotation SummarizationSetBy = Automatic
+
+	column qty_packed
+		dataType: int64
+		formatString: 0
+		lineageTag: a1cdc3b1-d1e0-4835-a91a-06711bfe3cdb
+		summarizeBy: sum
+		sourceColumn: qty_packed
+
+		annotation SummarizationSetBy = Automatic
+
+	column qty_received_in_shipment
+		dataType: int64
+		formatString: 0
+		lineageTag: a028cbae-a8ff-4a6d-928e-be4b68865791
+		summarizeBy: sum
+		sourceColumn: qty_received_in_shipment
+
+		annotation SummarizationSetBy = Automatic
+
+	column item_fulfillment_id
+		dataType: int64
+		formatString: 0
+		lineageTag: eb5c5f79-91b8-4625-a5b1-bb221bbdc75c
+		summarizeBy: sum
+		sourceColumn: item_fulfillment_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column location_id
+		dataType: int64
+		formatString: 0
+		lineageTag: c1fc3c42-f28d-4b30-b7b8-aff62a960335
+		summarizeBy: sum
+		sourceColumn: location_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column estimated_cost
+		dataType: double
+		lineageTag: 9423eab9-fbdb-486f-8574-a70169edfa41
+		summarizeBy: sum
+		sourceColumn: estimated_cost
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column price
+		dataType: double
+		lineageTag: cc1665dc-7da0-46f7-b5e5-56adc2c86f34
+		summarizeBy: sum
+		sourceColumn: price
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column item_unit_price
+		dataType: double
+		lineageTag: a7e17fe4-9a10-47e0-92f4-40200813f2d2
+		summarizeBy: sum
+		sourceColumn: item_unit_price
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column deleted_flag
+		dataType: string
+		lineageTag: 120f8d56-c5b0-46ae-aff3-770ddb27f422
+		summarizeBy: none
+		sourceColumn: deleted_flag
+
+		annotation SummarizationSetBy = Automatic
+
+	column misshipped_item_flag
+		dataType: string
+		lineageTag: adfaddf2-d360-48e1-8dc6-b2de307f2f7c
+		summarizeBy: none
+		sourceColumn: misshipped_item_flag
+
+		annotation SummarizationSetBy = Automatic
+
+	partition f_item_fulfillment_lines-08223b82-0831-402a-813c-b6d4d38dbf84 = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database("tommyreportingproduction.database.windows.net", "TommyEDW"),
+				    dbo_f_item_fulfillment_lines = Source{[Schema="dbo",Item="f_item_fulfillment_lines"]}[Data],
+				    #"Filtered Rows" = Table.SelectRows(dbo_f_item_fulfillment_lines, each ([account_id] = 156 or [account_id] = 345))
+				in
+				    #"Filtered Rows"
+
+	annotation PBI_ResultType = Table
+
