@@ -1,0 +1,234 @@
+table f_item_prices_snap
+	lineageTag: a1833da9-3c05-4383-bf84-25abd9428a52
+
+	column item_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 1e9d5ddb-0bec-4a97-ab66-ab281e558366
+		summarizeBy: none
+		sourceColumn: item_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column quantity
+		dataType: int64
+		formatString: 0
+		lineageTag: ec90cbf9-0923-4ef1-989a-07dada590db0
+		summarizeBy: sum
+		sourceColumn: quantity
+
+		annotation SummarizationSetBy = Automatic
+
+	column sales_price
+		dataType: double
+		formatString: 0.00
+		lineageTag: 5c9b80f2-54e1-4333-b135-c629feb8b714
+		summarizeBy: sum
+		sourceColumn: sales_price
+
+		annotation SummarizationSetBy = Automatic
+
+	column extended_sales_price
+		dataType: double
+		lineageTag: 7ca21fec-d3e0-49e0-a3bb-d49d9bc7e228
+		summarizeBy: sum
+		sourceColumn: extended_sales_price
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column last_purchase_price
+		dataType: double
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: a811e47c-7ed8-489e-857b-7b8ce14b7055
+		summarizeBy: sum
+		sourceColumn: last_purchase_price
+
+		annotation SummarizationSetBy = Automatic
+
+	column extended_last_purchase_price
+		dataType: double
+		lineageTag: 1bded8ed-16b4-49b8-8634-9ed621eba9a1
+		summarizeBy: sum
+		sourceColumn: extended_last_purchase_price
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column profit_amt
+		dataType: double
+		lineageTag: 6f32ffbe-b2a2-43e5-9a70-0b30183a59be
+		summarizeBy: sum
+		sourceColumn: profit_amt
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column margin_pct
+		dataType: double
+		formatString: 0
+		lineageTag: a54c8fe8-e812-4b1f-a425-c92254d1e316
+		summarizeBy: sum
+		sourceColumn: margin_pct
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	column extended_profit_amt
+		dataType: double
+		lineageTag: acae937a-e497-4c33-83ea-8dd45a1d1452
+		summarizeBy: sum
+		sourceColumn: extended_profit_amt
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column average_cost
+		dataType: double
+		lineageTag: b8391e3e-c620-4567-8ae4-acedf69a94d1
+		summarizeBy: sum
+		sourceColumn: average_cost
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column purchase_Price
+		dataType: double
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		lineageTag: d876e118-5f25-4cb7-994d-5abda8dc8162
+		summarizeBy: sum
+		sourceColumn: purchase_Price
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Current Margin' = ```
+			
+			    IF(
+			        ISBLANK([average_cost]),
+			            DIVIDE((f_item_prices_snap[purchase_Price] - f_item_prices_snap[last_purchase_price]), (f_item_prices_snap[purchase_Price])
+			        ),
+			       DIVIDE((f_item_prices_snap[purchase_Price] - f_item_prices_snap[average_cost]), (f_item_prices_snap[purchase_Price])
+			    )
+			)
+			```
+		dataType: double
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 12dcf971-dfc0-4d4d-a3a4-c1b63046f3fb
+		summarizeBy: sum
+		isDataTypeInferred
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Min Sales Margin' = ```
+			
+			    IF(
+			        ISBLANK(f_item_prices_snap[average_cost]),
+			            DIVIDE((f_item_prices_snap[sales_price] - f_item_prices_snap[last_purchase_price]), (f_item_prices_snap[sales_price])
+			        ),
+			        DIVIDE((f_item_prices_snap[sales_price] - f_item_prices_snap[average_cost]), (f_item_prices_snap[sales_price])
+			    )
+			)
+			```
+		dataType: double
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 8ed9227d-137f-4c46-bc13-2fc09e90a598
+		summarizeBy: sum
+		isDataTypeInferred
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Goal Margin Price' =
+			
+			IF(
+			    LEN([margin_pct]) = 3,
+			    IF(
+			        ISBLANK([average_cost]) || [Average_Cost] <= 0,
+			            DIVIDE(
+			            f_item_prices_snap[last_purchase_price], (1 - (VALUE(LEFT([margin_pct], LEN([margin_pct]) - 1)) * 0.01)
+			            )
+			        ),
+			        DIVIDE(
+			            f_item_prices_snap[average_cost], (1 - (VALUE(LEFT([margin_pct], LEN([margin_pct]) - 1)) * 0.01))
+			        )
+			    )
+			)
+		dataType: double
+		formatString: 0.00
+		lineageTag: 7922894b-2652-486c-b7c1-f814e3d5b4db
+		summarizeBy: sum
+		isDataTypeInferred
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Current/Goal Difference (Old)' = ```
+			
+			IF (
+			    ISBLANK ( [last_purchase_price] ),
+			    DIVIDE (
+			        [sales_price] - ( [last_purchase_price] * ( 1 + ( ( [sales_price] - [last_purchase_price] ) ) ) ),
+			        ( [sales_price] )
+			    ),
+			    DIVIDE (
+			        f_item_prices_snap[sales_price] - ( [average_cost] * ( 1 + ( ( f_item_prices_snap[sales_price] - f_item_prices_snap[average_cost] ) ) ) ),
+			        ( [sales_price] )
+			    )
+			)
+			
+			
+			```
+		dataType: double
+		lineageTag: 78721fac-c8ba-4df0-86e8-e168fdc59550
+		summarizeBy: sum
+		isDataTypeInferred
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Current/Goal Difference' = ```
+			
+			IF(
+			    LEN([margin_pct]) = 3,
+			    IF(
+			        ISBLANK(f_item_prices_snap[average_cost]) || f_item_prices_snap[average_cost] <= 0,
+			            (DIVIDE([last_purchase_price] / (1 - (VALUE(LEFT([margin_pct], LEN([margin_pct])) * 0.01))), 2)) - f_item_prices_snap[sales_price]
+			        ),
+			        (DIVIDE(f_item_prices_snap[average_cost] / (1 - (VALUE(LEFT([margin_pct], LEN([margin_pct])) * 0.01))), 2)) - f_item_prices_snap[sales_price]
+			    )
+			
+			
+			```
+		dataType: double
+		lineageTag: 62f9c2dd-4afe-4da2-ae54-71687ec0ab99
+		summarizeBy: sum
+		isDataTypeInferred
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Average Margin' = DIVIDE(f_item_prices_snap[sales_price]-f_item_prices_snap[purchase_Price],f_item_prices_snap[sales_price])
+		dataType: double
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: d18697ea-550f-4fb6-a283-d6d510410252
+		summarizeBy: sum
+		isDataTypeInferred
+
+		annotation SummarizationSetBy = Automatic
+
+	partition f_item_prices_snap-04b4328a-967b-4d54-a9f7-8677df7f90b2 = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database("tommyreportingproduction.database.windows.net", "TommyEDW", [Query="SELECT * #(lf)FROM f_item_prices_snap"])
+				in
+				    Source
+
+	annotation PBI_ResultType = Table
+
