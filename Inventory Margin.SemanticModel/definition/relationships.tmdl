@@ -1,0 +1,32 @@
+relationship 884c106f-ef1e-40ac-bfe6-f9170c5505da
+	fromColumn: f_ir_lines.item_id
+	toColumn: dim_item.item_id
+
+relationship 96ab8e34-6afa-4183-8146-84bdf422afe4
+	fromColumn: f_item_fulfillment_lines.item_id
+	toColumn: dim_item.item_id
+
+relationship 54305f68-6bf7-46f3-ac48-3f2e85cb4a18
+	fromColumn: dim_item.margin_category_id
+	toColumn: dim_margin_category.margin_category_id
+
+relationship 7eec752a-2ddd-48a4-b1da-088aa7906499
+	fromColumn: f_item_fulfillment_lines.account_id
+	toColumn: dim_accounts.account_id
+
+relationship b319f49e-9de8-4582-b1a6-2a830a5ad3c1
+	fromColumn: f_assembly_build.item_id
+	toColumn: dim_item.item_id
+
+relationship 35fced10-57af-43d0-b8f9-de6c011df00a
+	fromColumn: f_assembly_build_lines.item_id
+	toColumn: dim_item.item_id
+
+relationship aef3255d-b950-45e4-b3b7-e889033ca2b9
+	fromColumn: f_location_inventory_snap.item_id
+	toColumn: dim_item.item_id
+
+relationship fdbf4863-b8a8-4f1e-81a8-811bfef0b59f
+	fromColumn: f_item_prices_snap.item_id
+	toColumn: dim_item.item_id
+
