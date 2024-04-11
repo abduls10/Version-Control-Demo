@@ -1,0 +1,56 @@
+table dim_margin_category
+	lineageTag: 1b1f58ac-1955-49ea-bd2b-9a0e48800f40
+
+	column margin_category_id
+		dataType: int64
+		formatString: 0
+		lineageTag: d6b0036e-2e33-4d05-bcd3-7c743b4d6cbc
+		summarizeBy: none
+		sourceColumn: margin_category_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column margin_category_name
+		dataType: string
+		lineageTag: 14d5828b-1ddc-441f-81de-b8baa79ee9e8
+		summarizeBy: none
+		sourceColumn: margin_category_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column sales_pricing_category_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 9ad75f2e-9dec-490e-b74e-c72573d20445
+		summarizeBy: none
+		sourceColumn: sales_pricing_category_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column margin_pct
+		dataType: string
+		lineageTag: e0e13b7a-dc54-4fb4-befc-16f0b19daa76
+		summarizeBy: none
+		sourceColumn: margin_pct
+
+		annotation SummarizationSetBy = Automatic
+
+	column active_record_flag
+		dataType: string
+		lineageTag: 1816e8bf-606a-4e49-a87e-96c39778b292
+		summarizeBy: none
+		sourceColumn: active_record_flag
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_margin_category-87c7c8cb-0f51-4d6a-8f2c-5d79ee31cd65 = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database("tommyreportingproduction.database.windows.net", "TommyEDW"),
+				    dbo_dim_margin_category = Source{[Schema="dbo",Item="dim_margin_category"]}[Data]
+				in
+				    dbo_dim_margin_category
+
+	annotation PBI_ResultType = Table
+
