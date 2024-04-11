@@ -1,0 +1,104 @@
+table f_assembly_build_lines
+	lineageTag: 45718242-c589-4876-8917-17541cc70f03
+
+	column unique_line_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 7d3955da-d1da-42cb-91d1-80c193294854
+		summarizeBy: sum
+		sourceColumn: unique_line_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column transaction_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 646f5436-96f3-41ed-a5e2-16b6430e9fbf
+		summarizeBy: sum
+		sourceColumn: transaction_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column item_id
+		dataType: int64
+		formatString: 0
+		lineageTag: fb070059-9899-4f37-bd73-326f14b61f3e
+		summarizeBy: none
+		sourceColumn: item_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column amount
+		dataType: double
+		lineageTag: 0aca5c09-ec3d-4e6a-9d84-da9d7bebfdea
+		summarizeBy: sum
+		sourceColumn: amount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column quantity
+		dataType: int64
+		formatString: 0
+		lineageTag: d9798ce2-7255-4ba2-a92d-369f37b9c395
+		summarizeBy: sum
+		sourceColumn: quantity
+
+		annotation SummarizationSetBy = Automatic
+
+	column item_unit_price
+		dataType: double
+		lineageTag: 334a4693-b207-4b5a-9c11-bc5a6036886b
+		summarizeBy: sum
+		sourceColumn: item_unit_price
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column location_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 7b783521-af5c-44c2-a310-ee0e5c0ff5c4
+		summarizeBy: sum
+		sourceColumn: location_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column transaction_line_id
+		dataType: int64
+		formatString: 0
+		lineageTag: c239f309-f3b3-4eb5-85ff-d3e1cce0b60d
+		summarizeBy: sum
+		sourceColumn: transaction_line_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column account_id
+		dataType: int64
+		formatString: 0
+		lineageTag: b0d63249-5671-4def-9c39-81c4f0f26a10
+		summarizeBy: sum
+		sourceColumn: account_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column deleted_flag
+		dataType: string
+		lineageTag: 79d0de30-d417-4695-a450-7ab2bd560c22
+		summarizeBy: none
+		sourceColumn: deleted_flag
+
+		annotation SummarizationSetBy = Automatic
+
+	partition f_assembly_build_lines = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database("tommyreportingproduction.database.windows.net", "TommyEDW", [Query="SELECT *#(lf)FROM f_assembly_build_lines#(lf)WHERE account_id IN (118, 419)"])
+				in
+				    Source
+
+	annotation PBI_ResultType = Table
+
